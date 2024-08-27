@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+)
 
 // variaves escopo de paocote
 // var idade int = 27
@@ -32,6 +35,15 @@ func main() {
 	// )
 	// tanto faz dos modos de cima ou do modo abaixo
 
+	// bool
+	// int int8 int16 int32 int64
+	// uint uint8 uint16 uint32 uint64 uintptr ( o ultimo usado somente em conceito unsafe)
+	// byte -> igual a uint8
+	// rune -> igual a int32
+	// float32 float64
+	// complex64 complex128
+	// string
+
 	nome := "Paulo"
 	sobrenome := "Pereira"
 	// o modo acima nao é valido em escopo de pacote, somente de funcao
@@ -45,6 +57,31 @@ func main() {
 	// para tipos especificos o modelo acima nao funciona, preciso fazer a declaracao padrao
 	var y int8 = 10
 	fmt.Println(y)
+
+	var bt uint8 = 10
+	takeByte(bt)
+
+	convertIntFloat()
+
+	// CONSTANTE
+	// constante sao imutaveis
+	// nem todo tipo pode ser contante
+	// tipos caracter, string , booleanos e todos os valores numericos podem ser, o resto nao
+	// nao pode mos usar shortContext para constante
+	// constante eu posso omitir o meu tipo
+	// forma de driblar o sistema de tipo do GOLANG
+	// nao posso passar um float constante para uma que converte o valor em inteiro
+
+	const testeConstante = 48
+	fmt.Println(testeConstante)
+	takeInt32(testeConstante)
+	takeInt64(testeConstante)
+
+	// constante literal
+	takeInt32(11)
+	takeInt64(12)
+	takeString("foo") // string literal ou anonimo string
+
 }
 
 func digaOi() {
@@ -82,4 +119,30 @@ func somarIndefinido(nums ...int) int {
 		out += n
 	}
 	return out
+}
+
+func takeByte(b byte) {
+	fmt.Println(b)
+}
+
+func convertIntFloat() {
+	var x int = 65
+	f := float64(x)
+	fmt.Println(f)
+	s := string(x) //Transforma o valor em uma runa, nao é a forma certa de conversão
+	fmt.Println(s)
+	ss := strconv.FormatInt(int64(x), 10) // forma certa de converter um int em uma string
+	fmt.Println(ss)
+}
+
+func takeInt32(x int32) {
+	fmt.Println(x)
+}
+
+func takeInt64(x int64) {
+	fmt.Println(x)
+}
+
+func takeString(x string) {
+	fmt.Println(x)
 }
