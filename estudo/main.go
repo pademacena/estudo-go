@@ -6,6 +6,7 @@ import (
 	"math"
 	"strconv"
 	"sync"
+	"time"
 )
 
 // variaves escopo de paocote
@@ -90,6 +91,8 @@ func main() {
 	aulaLoops()
 	explicacao()
 	ifConditions()
+	switchStatements()
+	aulaDeDefer()
 
 }
 
@@ -259,3 +262,154 @@ func ifConditions() {
 func doError() error {
 	return errors.New("error")
 }
+
+func switchStatements() {
+	do(1)
+	do(2)
+	do(3)
+	do2(1)
+	do3(1)
+	fmt.Println(isWeekend(time.Now()))
+	do4()
+	do5(time.Now())
+	do6("")
+}
+
+func do(x int) {
+	// adicionar o Break é redundante
+	switch x {
+	case 1:
+		fmt.Println(1)
+	case 2:
+		fmt.Println(2)
+	case 3:
+		fmt.Println("outra coisa")
+	}
+}
+
+func do2(x int) {
+	// adicionar o Break é redundante
+	switch x {
+	case 1:
+		fmt.Println(1)
+		fallthrough // vai pro proximo caso
+	case 2:
+		fmt.Println(2)
+	case 3:
+		fmt.Println("outra coisa")
+	}
+}
+
+func do3(x int) {
+	switch {
+	case x == 1:
+		fmt.Println(1)
+	case "abc" == "foo":
+		fmt.Println(2)
+	default:
+		fmt.Println("outra coisa")
+	}
+}
+
+func isWeekend(x time.Time) bool {
+	switch {
+	case x.Weekday() > 0 && x.Weekday() < 6:
+		return false
+	default:
+		return true
+	}
+}
+
+func do4() {
+	switch x := math.Sqrt(4); x {
+	case 2:
+		fmt.Println("resultado é 2")
+	default:
+		fmt.Println("algo de errado")
+	}
+}
+
+func do5(x time.Time) bool {
+	switch x.Weekday() {
+	case time.Sunday, time.Saturday:
+		return true
+	default:
+		return false
+	}
+}
+
+func do6(x any) {
+	switch t := x.(type) {
+	case string:
+		takeString2(t)
+	case int:
+	case nil:
+	}
+}
+
+func takeString2(s string) {
+	fmt.Println(s)
+}
+
+func aulaDeDefer() {
+	// defer statement adia uma chamada de funcao ate a funcao principal retornar
+	doDefer()
+
+	x := doDefer2()
+	fmt.Println(x)
+
+	doDefer3()
+	doDefer4()
+	doDefer5()
+}
+
+func doDefer() {
+	defer fmt.Println(" world")
+	fmt.Println("Hello")
+}
+
+func doDefer2() int {
+	defer fmt.Println(" world")
+	fmt.Println("Hello")
+	return 10
+}
+
+func doDefer3() {
+	defer fmt.Println(3)
+	defer fmt.Println(2)
+	fmt.Println(1)
+}
+
+func doDefer4() {
+	x := 10
+	defer func(y int) {
+		fmt.Println(y)
+	}(x)
+
+	x = 50
+	fmt.Println(x)
+}
+
+func doDefer5() {
+	x := 10
+	defer func() {
+		fmt.Println(x)
+	}()
+
+	x = 50
+	fmt.Println(x)
+}
+
+// func doDefer6() {
+// 	file, err := os.Open("foo.txt")
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	// roda mesmo depois do panic
+// 	defer file.Close()
+
+// 	if err := x(); err != nil {
+// 		file.Close()
+// 		panic(err)
+// 	}
+// }
