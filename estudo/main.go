@@ -1,8 +1,11 @@
 package main
 
 import (
+	"errors"
 	"fmt"
+	"math"
 	"strconv"
+	"sync"
 )
 
 // variaves escopo de paocote
@@ -82,6 +85,12 @@ func main() {
 	takeInt64(12)
 	takeString("foo") // string literal ou anonimo string
 
+	estudoArray()
+
+	aulaLoops()
+	explicacao()
+	ifConditions()
+
 }
 
 func digaOi() {
@@ -145,4 +154,108 @@ func takeInt64(x int64) {
 
 func takeString(x string) {
 	fmt.Println(x)
+}
+
+func estudoArray() {
+	// o tempo tem que ser constante
+	// nao se pode colocar um tamanho a mais no array( rola erro de compilaçao)
+
+	arr := [3]int{1, 2, 3}
+	fmt.Println(arr)
+
+	// definindo valor em um indice especifico
+	arr2 := [10]int{5: 400, 7: 300}
+	fmt.Println(arr2)
+
+	arr3 := [10]string{4: "foo"}
+	fmt.Println(arr3)
+
+	// posso atribuir um valor de uma constante para um array, porem nao posso atribuir o valor de uma variavel comum
+	// temos arrays dinamicos, porem eles sao Slices e nao sao teratados como um array normal
+	const x = 10
+	arr4 := [x]string{2: "ola"}
+	fmt.Println(arr4)
+}
+
+// atualizar o go : baixar o instalador e sobreescrever (windows e mac)
+// linux: remover o antigo e instalar o novo (oooh bosta)
+func aulaLoops() {
+	// 3 statements
+	// padrao
+	var res int
+	for i := 0; i < 10; i++ {
+		res++
+	}
+	fmt.Println(res)
+
+	arr := [10]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	for range arr {
+		fmt.Println("dentro")
+	}
+
+	// retorna o indice
+	for i := range arr {
+		fmt.Println(i)
+	}
+
+	// indice e elemento
+	for i, elem := range arr {
+		fmt.Println(i, elem)
+	}
+
+	// _, -> blank identifier: no caso, retorna somente o elemento
+	for _, elem := range arr {
+		fmt.Println(elem)
+	}
+
+	for range 10 {
+		fmt.Println("dentro")
+	}
+
+	// so posso declarar uma variavel nesse caso
+	for i := range 10 {
+		fmt.Println(i)
+	}
+}
+
+func explicacao() {
+	const n = 10
+	var wg sync.WaitGroup
+	wg.Add(10)
+	for i := 0; i < n; i++ {
+		// i := i -> shadow
+		go func() {
+			defer wg.Done()
+			fmt.Println(i)
+		}()
+	}
+	wg.Wait()
+}
+
+func ifConditions() {
+	if 1 < 2 {
+		fmt.Println("sim")
+	}
+
+	// declarando valor variavel durante o if
+	// variavel so existe dentro do escopo da if condition
+	// short statement
+	if x := math.Sqrt(16); x < 5 {
+		fmt.Println("caiu no if")
+	} else if x > 4 {
+		fmt.Println("caiu no else")
+	}
+
+	meuBool := true
+	if meuBool {
+		fmt.Println("meuBool true")
+	}
+
+	if err := doError(); err != nil {
+		fmt.Println("deu erro")
+	}
+}
+
+func doError() error {
+	return errors.New("error")
 }
