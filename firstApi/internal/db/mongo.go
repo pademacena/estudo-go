@@ -12,7 +12,9 @@ import (
 var Client *mongo.Client
 
 // ConnectMongoDB estabelece a conexão com o MongoDB
-func ConnectMongoDB(uri string) {
+func ConnectMongoDB() {
+	uri := "mongodb://balta:e296cd9f@localhost:27017/"
+
 	log.Println("Tentando conectar ao MongoDB...")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)

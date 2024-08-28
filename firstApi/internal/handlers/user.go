@@ -17,6 +17,8 @@ import (
 var userCollection *mongo.Collection
 
 func init() {
+	// nao sei pq kralhos estou tendo que colocar ele aqui novamente, acho que isso tem que rolar toda vez que inicia a aplicacao
+	db.ConnectMongoDB()
 	if db.Client != nil {
 		userCollection = db.GetCollection("mydatabase", "users")
 	} else {
@@ -29,6 +31,8 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	var user models.User
 	_ = json.NewDecoder(r.Body).Decode(&user)
 	user.ID = primitive.NewObjectID()
+	user.CreatedAt = time.Now()
+	user.UpdatedAt = time.Now()
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()

@@ -10,8 +10,7 @@ import (
 
 func Run() {
 	// Conectar ao MongoDB
-	log.Println("Iniciando a conexao com o Mongo")
-	db.ConnectMongoDB("mongodb://balta:e296cd9f@localhost:27017/")
+	db.ConnectMongoDB()
 
 	// Configurar as rotas
 	router := routes.NewRouter()
