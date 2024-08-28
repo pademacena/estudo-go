@@ -9,6 +9,7 @@ import (
 
 	"firstApi/internal/db"
 	"firstApi/internal/models"
+	"firstApi/internal/types"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -16,9 +17,7 @@ import (
 
 var userCollection *mongo.Collection
 
-func init() {
-	// nao sei pq kralhos estou tendo que colocar ele aqui novamente, acho que isso tem que rolar toda vez que inicia a aplicacao
-	db.ConnectMongoDB()
+func testConnection() {
 	if db.Client != nil {
 		userCollection = db.GetCollection("mydatabase", "users")
 	} else {
@@ -28,8 +27,22 @@ func init() {
 
 // RegisterUser é o handler para registrar um novo usuário
 func RegisterUser(w http.ResponseWriter, r *http.Request) {
+	testConnection()
+
 	var user models.User
 	_ = json.NewDecoder(r.Body).Decode(&user)
+
+	if user.Name == "" || user.Email == "" || user.Password == "" {
+		messageError := types.Error{
+			Message: "Algum campo esta faltando",
+		}
+		log.Println("Erro")
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(messageError)
+		return
+	}
+
 	user.ID = primitive.NewObjectID()
 	user.CreatedAt = time.Now()
 	user.UpdatedAt = time.Now()
